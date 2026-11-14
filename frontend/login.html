@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Σύνδεση - Hotel Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Μενού -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">🏨 Hotel Booking</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="index.html">Αρχική</a>
+            <a class="nav-link active" href="login.html" id="nav-login">Σύνδεση</a>
+            <a class="nav-link" href="my-bookings.html" id="nav-bookings" style="display:none;">Οι Κρατήσεις μου</a>
+            <a class="nav-link" href="#" id="nav-logout" style="display:none;" onclick="logout()">Αποσύνδεση (<span id="user-name"></span>)</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            
+            <!-- Καρτέλες -->
+            <ul class="nav nav-tabs" id="authTabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button">Σύνδεση</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button">Εγγραφή</button>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-3">
+                <div class="tab-pane fade show active" id="login">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Κωδικός</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Σύνδεση</button>
+                        <div id="loginError" class="alert alert-danger mt-3" style="display:none;"></div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="register">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label">Όνομα</label>
+                            <input type="text" class="form-control" id="regName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="regEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Κωδικός</label>
+                            <input type="password" class="form-control" id="regPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Εγγραφή</button>
+                        <div id="registerMessage" class="alert alert-success mt-3" style="display:none;"></div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const errorDiv = document.getElementById('loginError');
+        errorDiv.style.display = 'none';
+
+        try {
+            const data = await login(email, password);
+            saveSession(data.accessToken, { name: email.split('@')[0], email });
+            window.location.href = 'index.html';
+        } catch (err) {
+            errorDiv.textContent = err.message;
+            errorDiv.style.display = 'block';
+        }
+    });
+
+    // Register
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('regName').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const msgDiv = document.getElementById('registerMessage');
+
+        try {
+            await register(name, email, password);
+            msgDiv.textContent = 'Η εγγραφή ολοκληρώθηκε! Μπορείτε τώρα να συνδεθείτε.';
+            msgDiv.style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('login-tab').click();
+            }, 1500);
+        } catch (err) {
+            alert(err.message);
+        }
+    });
+</script>
+</body>
+</html>
