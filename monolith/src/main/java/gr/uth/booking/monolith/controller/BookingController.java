@@ -43,4 +43,27 @@ public class BookingController {
         // Το backend βρίσκει αυτόματα ποιος είναι από το token
         return new ResponseEntity<>(bookingService.getBookingsByUserEmail(authentication.getName()), HttpStatus.OK);
     }
+
+    // Montelo gia aitima allagis katastasis
+    record StatusUpdateRequest(String status) {}
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
+        try {
+            Booking updatedBooking = bookingService.updateBookingStatus(id, request.status());
+            return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> cancelBooking(@PathVariable Long id) {
+        try {
+            Booking cancelledBooking = bookingService.cancelBooking(id);
+            return new ResponseEntity<>(cancelledBooking, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
