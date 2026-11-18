@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<!-- Μενού -->
+<!-- Menou -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="index.html">🏨 Hotel Booking</a>
@@ -24,7 +24,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             
-            <!-- Καρτέλες -->
+            <!-- Karteles -->
             <ul class="nav nav-tabs" id="authTabs" role="tablist">
                 <li class="nav-item">
                     <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button">Σύνδεση</button>
@@ -112,7 +112,7 @@
                 document.getElementById('login-tab').click();
             }, 1500);
         } catch (err) {
-            alert(err.message);
+            showNotification('❌ ' + err.message, 'danger');
         }
     });
 </script>

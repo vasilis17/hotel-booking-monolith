@@ -19,6 +19,7 @@ public class Review {
     // Sindeo thn aksiologisi me thn sigkekrimeni kratisi
     @OneToOne
     @JoinColumn(name = "booking_id", nullable = false, unique = true)
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"user", "room", "review"})
     private Booking booking;
 
     @Column(nullable = false)

@@ -68,7 +68,13 @@ public class BookingService {
         }
 
         // Elegxos diathesimotitas domatiou
-        List<Booking> existingBookings = bookingRepository.findByRoomIdAndCheckoutDateAfterAndCheckInDateBefore(roomId, checkIn, checkOut);
+        List<Booking> existingBookings = bookingRepository.findByRoomIdAndStatusNotAndCheckoutDateAfterAndCheckInDateBefore(
+                roomId,
+                BookingStatus.CANCELLED,
+                checkIn,
+                checkOut
+        );
+
         if(!existingBookings.isEmpty()) {
             throw new RuntimeException("Το δωμάτιο είναι ήδη κλεισμένο για αυτές τις ημερομηνίες");
         }

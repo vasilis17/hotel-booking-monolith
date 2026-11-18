@@ -1,6 +1,7 @@
 package gr.uth.booking.monolith.repository;
 
 import gr.uth.booking.monolith.model.Booking;
+import gr.uth.booking.monolith.model.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +10,11 @@ import java.util.List;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    // Edo elegxetai an iparxei kratisi gia to domatio pou epikaliptetai me tis nees imerominies
-    // logiki: Nea CheckInDate < palia CkeckOutDate KAI nea CkeckOutDate > palia CkeckInDate
-    List<Booking> findByRoomIdAndCheckoutDateAfterAndCheckInDateBefore(Long roomId, LocalDate newCheckIn, LocalDate newCheckOut);
+    // Elegxei an yparxei energos kratisi (oxi CANCELLED) poy epikaliptetai me tis nees imerominies
+    List<Booking> findByRoomIdAndStatusNotAndCheckoutDateAfterAndCheckInDateBefore(
+            Long roomId,
+            BookingStatus status,
+            LocalDate newCheckIn,
+            LocalDate newCheckOut
+    );
 }
