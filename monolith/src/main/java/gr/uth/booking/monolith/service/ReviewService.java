@@ -20,11 +20,16 @@ public class ReviewService {
         this.bookingRepository = bookingRepository;
     }
 
-    public Review createReview(Long bookingId, int rating, String comment) {
+    @jakarta.transaction.Transactional
+    public Review createReview(Long bookingId, int rating, String comment, String email) {
+        if (bookingId == null || (comment != null && comment.length() > 1000))
+            throw new IllegalArgumentException("Μη έγκυρη κράτηση ή σχόλιο άνω των 1000 χαρακτήρων");
         // Elegxos gia to an iparxei h kratisi
-        Booking booking = bookingRepository.findById(bookingId)
+        Booking booking = bookingRepository.findLockedById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Η κράτηση δεν βρέθηκε"));
 
+        if (!booking.getUser().getEmail().equals(email))
+            throw new org.springframework.security.access.AccessDeniedException("Δεν επιτρέπεται η πρόσβαση");
         // Elegxos gia to an h kratisi exei oloklirothei
         if (booking.getStatus() != BookingStatus.COMPLETED) {
             throw new RuntimeException("Μπορείτε να αξιολογήσετε μόνο ολοκληρωμένες κρατήσεις");

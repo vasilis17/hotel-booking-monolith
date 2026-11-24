@@ -21,10 +21,12 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createReview(@RequestBody ReviewRequest request) {
+    public ResponseEntity<?> createReview(@RequestBody ReviewRequest request, org.springframework.security.core.Authentication authentication) {
         try {
-            Review review = reviewService.createReview(request.bookingId(), request.rating(), request.comment());
+            Review review = reviewService.createReview(request.bookingId(), request.rating(), request.comment(), authentication.getName());
             return new ResponseEntity<>(review, HttpStatus.CREATED);
+        } catch (org.springframework.security.access.AccessDeniedException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

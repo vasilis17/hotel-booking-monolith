@@ -30,7 +30,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Elegxos an to Token iparxei kai einai egkiro
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // Pairno to Authentication
-            Authentication auth = jwtTokenProvider.getAuthentication(token);
+            Authentication auth = null;
+            try {
+                auth = jwtTokenProvider.getAuthentication(token);
+            } catch (org.springframework.security.core.userdetails.UsernameNotFoundException | io.jsonwebtoken.JwtException ex) {
+                SecurityContextHolder.clearContext();
+            }
 
             // To vazo sto SecurityContext
             if (auth != null) {

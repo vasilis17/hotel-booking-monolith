@@ -23,6 +23,8 @@ public class User {
     private String email;
 
     @Column(nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
     private String password;
 
     // Tha prostheso kai rolo (px: admin, customer)

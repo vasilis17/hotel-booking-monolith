@@ -10,9 +10,9 @@ A full-stack hotel booking application built with **Java Spring Boot** (backend)
 | :--- | :--- |
 | **Backend** | Java 17, Spring Boot 4, Spring Data JPA |
 | **Security** | Spring Security, JWT (JSON Web Tokens), BCrypt |
-| **Database** | H2 (In-memory) |
+| **Database** | PostgreSQL 15 |
 | **Frontend** | HTML5, CSS3 (Bootstrap 5), JavaScript (Fetch API) |
-| **Tools** | Maven, Git, Docker (planned) |
+| **Tools** | Maven, Git, Docker Compose |
 
 ---
 
@@ -51,3 +51,6 @@ The monolithic backend serves all functionalities (Users, Rooms, Bookings) from 
    ```bash
    git clone https://github.com/vasilis17/hotel-booking-monolith.git
    cd hotel-booking-monolith
+## Backend configuration (Windows PowerShell)
+
+From `monolith/`, set `$env:DB_PASSWORD` to your existing local database password and `$env:JWT_SECRET` to a new Base64-encoded random 64-byte key. Then run `docker compose up -d` and `.\mvnw.cmd spring-boot:run`. Existing PostgreSQL volumes retain their original password. Room writes are disabled through HTTP until an admin role is implemented; use database seed data for the experiment.

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15
@@ -7,9 +5,9 @@ services:
     environment:
       POSTGRES_DB: hotel_booking
       POSTGRES_USER: hotel_user
-      POSTGRES_PASSWORD: hotel_pass
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped

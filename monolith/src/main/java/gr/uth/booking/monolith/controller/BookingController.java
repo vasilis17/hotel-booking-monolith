@@ -33,6 +33,8 @@ public class BookingController {
                     request.checkOut()
             );
             return new ResponseEntity<>(booking, HttpStatus.CREATED);
+        } catch (org.springframework.security.access.AccessDeniedException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -48,20 +50,24 @@ public class BookingController {
     record StatusUpdateRequest(String status) {}
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
+    public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request, Authentication authentication) {
         try {
-            Booking updatedBooking = bookingService.updateBookingStatus(id, request.status());
+            Booking updatedBooking = bookingService.updateBookingStatus(id, request.status(), authentication.getName());
             return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
+        } catch (org.springframework.security.access.AccessDeniedException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> cancelBooking(@PathVariable Long id) {
+    public ResponseEntity<?> cancelBooking(@PathVariable Long id, Authentication authentication) {
         try {
-            Booking cancelledBooking = bookingService.cancelBooking(id);
+            Booking cancelledBooking = bookingService.cancelBooking(id, authentication.getName());
             return new ResponseEntity<>(cancelledBooking, HttpStatus.OK);
+        } catch (org.springframework.security.access.AccessDeniedException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -10,6 +10,12 @@ import java.util.List;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
+    List<Booking> findByUserId(Long userId);
+
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @org.springframework.data.jpa.repository.Query("select b from Booking b where b.id = :id")
+    java.util.Optional<Booking> findLockedById(@org.springframework.data.repository.query.Param("id") Long id);
+
     // Elegxei an yparxei energos kratisi (oxi CANCELLED) poy epikaliptetai me tis nees imerominies
     List<Booking> findByRoomIdAndStatusNotAndCheckoutDateAfterAndCheckInDateBefore(
             Long roomId,

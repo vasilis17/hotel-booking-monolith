@@ -20,6 +20,8 @@ public class RoomService {
     }
 
     public Room createRoom(Room room) {
+        if (room.getId() != null || room.getRoomNumber() == null || room.getRoomNumber().isBlank() || room.getType() == null || room.getType().isBlank() || !Double.isFinite(room.getPrice()) || room.getPrice() <= 0)
+            throw new IllegalArgumentException("Μη έγκυρα στοιχεία δωματίου");
         // Elegxos an iparxei idi room me afton ton arithmho
         if (roomRepository.findByRoomNumber(room.getRoomNumber()).isPresent()) {
             throw new RuntimeException("Υπάρχει ήδη δωμάτιο με αριθμό " + room.getRoomNumber());

@@ -1,3 +1,4 @@
+
 # IntelliJ
 .idea/
 *.iml
@@ -14,5 +15,24 @@ target/
 .DS_Store
 Thumbs.db
 
-# Environment
+# Environment and secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+
+# Database backups
+*.dump
+*.backup
+*.bak
+
+# Temporary files
+*.tmp
+*.swp
+
+# JMeter generated results
+*.jtl
+jmeter-results/

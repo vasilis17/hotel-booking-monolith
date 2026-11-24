@@ -23,6 +23,8 @@ public class UserService implements UserDetailsService {
     }
 
     public User registerUser(String name, String email, String password) {
+        if (name == null || name.isBlank() || name.length() > 255 || email == null || email.length() > 255 || !email.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+") || password == null || password.length() < 8 || password.getBytes(java.nio.charset.StandardCharsets.UTF_8).length > 72)
+            throw new IllegalArgumentException("Μη έγκυρα στοιχεία εγγραφής (κωδικός τουλάχιστον 8 χαρακτήρων, έως 72 bytes)");
         if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("Το email χρησιμοποιείται ήδη!");
         }

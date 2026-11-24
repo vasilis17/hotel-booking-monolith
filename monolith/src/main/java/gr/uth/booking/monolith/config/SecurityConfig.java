@@ -61,7 +61,8 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/rooms/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/rooms/**").permitAll()
+                        .requestMatchers("/api/rooms/**", "/api/create-key").denyAll()
                         .requestMatchers("/api/reviews/room/**").permitAll()
                         .anyRequest().authenticated()
                 )
